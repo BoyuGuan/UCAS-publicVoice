@@ -1,0 +1,8 @@
+bs4
+numpy
+matplotlib
+pillow
+wordcloud
+imageio
+jieba
+snownlp
