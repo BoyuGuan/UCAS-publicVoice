@@ -58,8 +58,8 @@ def wordCloud( wordCount, savePath = './output/a.png'):
                  '将','也','日', '个', '不', '与', '地', '月', '下', '可', '来',
                  '到', '已', '这','都','并','们','各','向', '等', '说', '要', '有',
                  '日电', '但', '又', '日', '上', '时', '我', '会', '着', '他', '同',
-                 '与', '由', '及', '被', '用', '把', '多','更', '而']
-    w = wordcloud.WordCloud(width=1000,
+                 '与', '由', '及', '被', '用', '把', '多','更', '而', '中', '我们']
+    w = wordcloud.WordCloud(width=700,
                         height=700,
                         stopwords=stopWords,
                         background_color='white',
