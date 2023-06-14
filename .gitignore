@@ -2,3 +2,4 @@ log/
 data/
 t.py
 output/
+__pycache__/

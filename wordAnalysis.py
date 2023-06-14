@@ -1,8 +1,11 @@
 import os, datetime
-import matplotlib.pyplot as plt
 from collections import Counter
 from multiprocessing import Pool
 import jieba
+import numpy as np
+import matplotlib.pyplot as plt
+
+from wordCloud import saveVariable, loadVariable
 
 TARGETWORDS = ['十四届全国人大', '十四届全国人民代表大会', '两会', '全国政协十四届',
                 '政协第十四届']
@@ -43,14 +46,92 @@ def produceWordCount():
     p.join()
     print('\nAll subprocesses done.\n')
 
-    allWordsRelated = Counter()
+    allWordsRelatedCount = Counter()
     for wordsRelated in results:
-        allWordsRelated += wordsRelated
+        allWordsRelatedCount += wordsRelated
 
-    return allWordsRelated
+    return allWordsRelatedCount
+
+def wordsInVocabDistribution(allWordsRelatedCount):
+    
+    allWordsRelatedCount = np.log(allWordsRelatedCount)
+    plt.plot(allWordsRelatedCount)
+    plt.xlabel('WordIndex')
+    plt.ylabel('log of words count')
+    plt.title('words distribution in the vocab')
+    plt.savefig('./output/wordsInVocabDistribution.png', dpi = 600)
+
+def wordsFrequencyDistribution(allWordsRelatedCount):
+    wordsFrequencyData = []
+    xLabel = []
+
+    wordsFrequencyData.append(np.sum(allWordsRelatedCount == 1))
+    xLabel.append('1')
+
+    wordsFrequencyData.append(np.sum(allWordsRelatedCount == 2))
+    xLabel.append('2')
+
+    wordsFrequencyData.append(np.sum(allWordsRelatedCount == 3))
+    xLabel.append('3')
+
+    wordsFrequencyData.append(np.sum(allWordsRelatedCount == 4))
+    xLabel.append('4')
+
+    wordsFrequencyData.append(np.sum(allWordsRelatedCount == 5))
+    xLabel.append('5')
+
+    wordsFrequencyData.append(np.sum(allWordsRelatedCount > 5) - np.sum(allWordsRelatedCount > 10))
+    xLabel.append('6~10')
+
+    wordsFrequencyData.append(np.sum(allWordsRelatedCount > 10) - np.sum(allWordsRelatedCount > 50))
+    xLabel.append('11~50')
+
+    wordsFrequencyData.append(np.sum(allWordsRelatedCount > 50) - np.sum(allWordsRelatedCount > 100))
+    xLabel.append('51~100')
+
+    wordsFrequencyData.append(np.sum(allWordsRelatedCount > 100) - np.sum(allWordsRelatedCount > 1000))
+    xLabel.append('101~1000')
+
+    wordsFrequencyData.append(np.sum(allWordsRelatedCount > 1000) - np.sum(allWordsRelatedCount > 10000))
+    xLabel.append('1001~10000')
+
+    wordsFrequencyData.append(np.sum(allWordsRelatedCount > 10000))
+    xLabel.append('>10000')
+
+    fig, ax = plt.subplots(figsize=(13,4), dpi=600)
+    bar = plt.bar(xLabel, wordsFrequencyData, 0.5, color='coral',edgecolor='grey')
+    ax.set_title('words frequency distribution')
+    ax.set_xlabel('frequency')
+    ax.set_ylabel('number')
+
+    # 显示数据标签
+    for a,b in zip(xLabel, wordsFrequencyData):
+        plt.text(a,b,
+                b,
+                ha='center', 
+                va='bottom',
+                )
+        
+    fig.savefig('./output/wordsFrequencyDistribution.png', dpi = 600)
 
 
+def createTwoWordDistribution():
+    # allWordsRelated = produceWordCount()
+    # saveVariable(allWordsRelated, './output/allWordsRelated.pickle')
+    allWordsRelatedCount = loadVariable( './output/allWordsRelated.pickle')
+
+    allWordsRelatedCount = list(allWordsRelatedCount.items())
+    allWordsRelatedCount = [i[1] for i in allWordsRelatedCount]
+    allWordsRelatedCount.sort(reverse=True)
+    allWordsRelatedCount = np.array(allWordsRelatedCount)
+    # print(np.sum(allWordsRelatedCount>10000) )
+    wordsFrequencyDistribution(allWordsRelatedCount)
+    # print(allWordsRelatedCount[10000:10300])
+
+    # allWordsRelatedCount = np.array(allWordsRelatedCount)
+
+    # wordsInVocabDistribution(allWordsRelatedCount)    
 
 
 if __name__=='__main__':
-    print(produceWordCount())
+    createTwoWordDistribution()
