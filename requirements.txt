@@ -6,3 +6,4 @@ wordcloud
 imageio
 jieba
 snownlp
+cnsenti

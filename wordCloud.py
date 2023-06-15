@@ -80,6 +80,8 @@ def wordCloud( wordCount, savePath = './output/a.png'):
 
 
 if __name__=='__main__':
-    # allWordCount = produceWordCount()
-    allWordCount = loadVariable('./output/wordCounter.pickle')
+    try:
+        allWordCount = loadVariable('./output/wordCounter.pickle')
+    except:
+        allWordCount = produceWordCount()
     wordCloud(allWordCount)

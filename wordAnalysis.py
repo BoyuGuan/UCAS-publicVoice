@@ -116,22 +116,18 @@ def wordsFrequencyDistribution(allWordsRelatedCount):
 
 
 def createTwoWordDistribution():
-    # allWordsRelated = produceWordCount()
-    # saveVariable(allWordsRelated, './output/allWordsRelated.pickle')
-    allWordsRelatedCount = loadVariable( './output/allWordsRelated.pickle')
+    try:
+        allWordsRelatedCount = loadVariable( './output/allWordsRelated.pickle')
+    except:
+        allWordsRelated = produceWordCount()
+        saveVariable(allWordsRelated, './output/allWordsRelated.pickle')
 
     allWordsRelatedCount = list(allWordsRelatedCount.items())
     allWordsRelatedCount = [i[1] for i in allWordsRelatedCount]
     allWordsRelatedCount.sort(reverse=True)
     allWordsRelatedCount = np.array(allWordsRelatedCount)
-    # print(np.sum(allWordsRelatedCount>10000) )
+    wordsInVocabDistribution(allWordsRelatedCount)
     wordsFrequencyDistribution(allWordsRelatedCount)
-    # print(allWordsRelatedCount[10000:10300])
-
-    # allWordsRelatedCount = np.array(allWordsRelatedCount)
-
-    # wordsInVocabDistribution(allWordsRelatedCount)    
-
 
 if __name__=='__main__':
     createTwoWordDistribution()
