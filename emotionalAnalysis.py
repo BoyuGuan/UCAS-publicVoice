@@ -68,7 +68,8 @@ def drawEmotionalData(emotionalData, emotionalDataClass ):
         else ['#4d4f36', '#7fb80e', '#6950a1']
     title = 'emotional analysis of vocab data about US' if emotionalDataClass == 'US' \
         else 'emotional analysis of vocab data about 14th National People\'s Congress' 
-    explode = (0.04, 0.03, 0.02) #将某一块分割出来，值越大分割出的间隙越大
+    #将某一块分割出来，值越大分割出的间隙越大
+    explode = (0.04, 0.03, 0.02) if emotionalDataClass == 'US' else (0.04, 0.15, 0.02)
     plt.pie(drawData,
                 explode=explode,
                 labels=labels,

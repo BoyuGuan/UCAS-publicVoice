@@ -56,7 +56,8 @@ def findMostRelativeWords():
         saveVariable(allRelativeWords, './output/realtiveWords.pickle')
     allRelativeWords = list(allRelativeWords.items())
     allRelativeWords.sort(key = lambda x: x[1], reverse= True)
-    print(allRelativeWords[:100])
+    for i in range(25):
+        print(allRelativeWords[i*4], allRelativeWords[i*4 + 1], allRelativeWords[i*4 + 2], allRelativeWords[i*4 + 3])
 
 
 
